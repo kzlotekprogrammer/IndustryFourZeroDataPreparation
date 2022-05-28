@@ -10,5 +10,7 @@ namespace IndustryFourZeroDataPreparation
     {
         public WeatherSample Weather { get; set; }
         public MeasurmentSample Measurment { get; set; }
+        public double PyranometrAverage { get; set; }
+        public double AlternatingCurrentAverage { get; set; }
     }
 }

@@ -18,7 +18,8 @@ namespace IndustryFourZeroDataPreparation
             using (StreamWriter streamWriter = new StreamWriter("TrainingDataWithDate.txt"))
             {
                 streamWriter.WriteLine(";Wejście:");
-                streamWriter.WriteLine(";   Pyranometr [W/m2]");
+                streamWriter.WriteLine(";   Pyranometr suma [W/m2]");
+                streamWriter.WriteLine(";   Pyranometr uśrednione [W/m2]");
                 streamWriter.WriteLine(";   Temperatura [°C]");
                 streamWriter.WriteLine(";   Temperatura odczuwalna [°C]");
                 streamWriter.WriteLine(";   Kierunek wiatru [°]");
@@ -36,15 +37,16 @@ namespace IndustryFourZeroDataPreparation
                 streamWriter.WriteLine(";       Burza=6");
                 streamWriter.WriteLine(";       Śnieg=7");
                 streamWriter.WriteLine(";Wyjście:");
-                streamWriter.WriteLine(";   E-AC_(sc-Si)_[Wh]");
+                streamWriter.WriteLine(";   E-AC_(sc-Si)_[Wh] suma");
+                streamWriter.WriteLine(";   E-AC_(sc-Si)_[Wh] uśrednione");
 
                 foreach (OutputSample outputSample in outputSamples)
                 {
                     WeatherSample weatherSample = outputSample.Weather;
                     MeasurmentSample measurmentSample = outputSample.Measurment;
-                    streamWriter.WriteLine($"{weatherSample.Date}\t{measurmentSample.Pyranometr}\t{weatherSample.Temperature}\t{weatherSample.TemperatureFelt}\t" +
+                    streamWriter.WriteLine($"{weatherSample.Date}\t{measurmentSample.Pyranometr}\t{outputSample.PyranometrAverage}\t{weatherSample.Temperature}\t{weatherSample.TemperatureFelt}\t" +
                         $"{weatherSample.WindDirection}\t{weatherSample.WindSpeed}\t{weatherSample.RelativeHumidity}\t{weatherSample.DewPoint}" +
-                        $"\t{weatherSample.Pressure}\t{weatherSample.WeatherKind}\t{measurmentSample.AlternatingCurrent}");
+                        $"\t{weatherSample.Pressure}\t{weatherSample.WeatherKind}\t{measurmentSample.AlternatingCurrent}\t{outputSample.AlternatingCurrentAverage}");
                 }
             }
         }
@@ -82,9 +84,13 @@ namespace IndustryFourZeroDataPreparation
                 outSamp.Measurment = new MeasurmentSample()
                 {
                     Date = startTime,
-                    Pyranometr = measSamplToAgg.Sum(m => m.Pyranometr) / measSamplToAgg.Count,
-                    AlternatingCurrent = measSamplToAgg.Sum((m) => m.AlternatingCurrent)// / measSamplToAgg.Count,
+                    Pyranometr = measSamplToAgg.Sum(m => m.Pyranometr),
+                    AlternatingCurrent = measSamplToAgg.Sum((m) => m.AlternatingCurrent),
                 };
+
+                outSamp.PyranometrAverage = measSamplToAgg.Sum(m => m.Pyranometr) / measSamplToAgg.Count;
+                outSamp.AlternatingCurrentAverage = measSamplToAgg.Sum(m => m.AlternatingCurrent) / measSamplToAgg.Count;
+
                 outputSamples.Add(outSamp);
             }
 
