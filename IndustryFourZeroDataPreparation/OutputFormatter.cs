@@ -83,7 +83,7 @@ namespace IndustryFourZeroDataPreparation
                 {
                     Date = startTime,
                     Pyranometr = measSamplToAgg.Sum(m => m.Pyranometr) / measSamplToAgg.Count,
-                    AlternatingCurrent = measSamplToAgg.Sum((m) => m.AlternatingCurrent) / measSamplToAgg.Count,
+                    AlternatingCurrent = measSamplToAgg.Sum((m) => m.AlternatingCurrent)// / measSamplToAgg.Count,
                 };
                 outputSamples.Add(outSamp);
             }
